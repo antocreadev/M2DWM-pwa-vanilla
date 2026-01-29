@@ -306,6 +306,69 @@
     init() {
       const time = localStorage.getItem('reminderTime');
       if (time) this.scheduleCheck(time);
+      this.showBannerIfNeeded();
+    },
+
+    showBannerIfNeeded() {
+      if (!('Notification' in window)) return;
+      if (Notification.permission !== 'default') return;
+
+      const dismissed = localStorage.getItem('notifBannerDismissed');
+      if (dismissed && dismissed === formatDate(new Date())) return;
+
+      const banner = document.getElementById('notif-banner');
+      if (!banner) return;
+      banner.hidden = false;
+
+      document.getElementById('notif-accept').addEventListener('click', async () => {
+        const granted = await this.requestPermission();
+        banner.hidden = true;
+        if (granted) {
+          this.sendTestNotification();
+          if (!localStorage.getItem('reminderTime')) {
+            localStorage.setItem('reminderTime', '20:00');
+            this.scheduleCheck('20:00');
+          }
+        }
+      });
+
+      document.getElementById('notif-dismiss').addEventListener('click', () => {
+        banner.hidden = true;
+        localStorage.setItem('notifBannerDismissed', formatDate(new Date()));
+      });
+    },
+
+    async sendTestNotification() {
+      if (!('Notification' in window) || Notification.permission !== 'granted') return;
+
+      if ('serviceWorker' in navigator) {
+        try {
+          const reg = await navigator.serviceWorker.ready;
+          await reg.showNotification("Journal d'humeur", {
+            body: 'Les notifications sont activées !',
+            icon: 'icons/icon-192.svg',
+            tag: 'mood-test'
+          });
+          return;
+        } catch (_) { /* fall through */ }
+      }
+
+      new Notification("Journal d'humeur", {
+        body: 'Les notifications sont activées !',
+        icon: 'icons/icon-192.svg'
+      });
+    },
+
+    stopReminder() {
+      if (this.intervalId) {
+        clearInterval(this.intervalId);
+        this.intervalId = null;
+      }
+      localStorage.removeItem('reminderTime');
+    },
+
+    isActive() {
+      return ('Notification' in window) && Notification.permission === 'granted' && !!localStorage.getItem('reminderTime');
     },
 
     scheduleCheck(time) {
@@ -541,8 +604,8 @@
             <h3>Rappel quotidien</h3>
             <div class="reminder-row">
               <label for="reminder-time">Heure du rappel :</label>
-              <input type="time" id="reminder-time" value="${localStorage.getItem('reminderTime') || '20:00'}">
-              <button id="save-reminder" class="btn-secondary">Activer</button>
+              <input type="time" id="reminder-time" value="${localStorage.getItem('reminderTime') || '20:00'}"${Notifications.isActive() ? ' disabled' : ''}>
+              <button id="save-reminder" class="${Notifications.isActive() ? 'btn-danger' : 'btn-secondary'}">${Notifications.isActive() ? 'Désactiver' : 'Activer'}</button>
             </div>
           </div>
         </div>
@@ -559,14 +622,19 @@
       });
 
       this.app.querySelector('#save-reminder').addEventListener('click', async () => {
+        if (Notifications.isActive()) {
+          Notifications.stopReminder();
+          this.renderStats();
+          return;
+        }
+
         const time = this.app.querySelector('#reminder-time').value;
         const granted = await Notifications.requestPermission();
         if (granted) {
           localStorage.setItem('reminderTime', time);
           Notifications.scheduleCheck(time);
-          const btn = this.app.querySelector('#save-reminder');
-          btn.textContent = 'Activé !';
-          setTimeout(() => { btn.textContent = 'Activer'; }, 2000);
+          Notifications.sendTestNotification();
+          this.renderStats();
         } else {
           const old = this.app.querySelector('.notif-denied');
           if (old) old.remove();

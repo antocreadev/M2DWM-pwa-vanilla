@@ -29,6 +29,27 @@
 
   <main id="app" aria-live="polite"></main>
 
+  <!-- Notification permission banner -->
+  <div id="notif-banner" class="install-banner" role="alert" hidden>
+    <div class="install-banner-content">
+      <div class="install-banner-icon" aria-hidden="true">
+        <svg width="40" height="40" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+          <rect width="192" height="192" rx="40" fill="#6C63FF"/>
+          <path d="M96 36c-22 0-40 18-40 40v30l-10 10v8h100v-8l-10-10V76c0-22-18-40-40-40z" fill="#FFF"/>
+          <circle cx="96" cy="148" r="14" fill="#FFF"/>
+        </svg>
+      </div>
+      <div class="install-banner-text">
+        <strong>Activer les notifications</strong>
+        <span>Recevez un rappel quotidien pour noter votre humeur</span>
+      </div>
+    </div>
+    <div class="install-banner-actions">
+      <button id="notif-dismiss" class="install-btn-dismiss" aria-label="Fermer">Plus tard</button>
+      <button id="notif-accept" class="install-btn-accept">Activer</button>
+    </div>
+  </div>
+
   <!-- Install prompt banner -->
   <div id="install-banner" class="install-banner" role="alert" hidden>
     <div class="install-banner-content">
