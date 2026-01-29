@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#6C63FF">
+  <meta name="description" content="Journal d'humeur — Suivez votre humeur au quotidien">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <link rel="stylesheet" href="style.css">
+  <title>Journal d'humeur</title>
+</head>
+<body>
+  <header>
+    <h1>Journal d'humeur</h1>
+  </header>
+
+  <main id="app" aria-live="polite"></main>
+
+  <nav id="tab-bar" role="tablist" aria-label="Navigation principale">
+    <button class="tab active" data-tab="add" role="tab" aria-selected="true" aria-label="Ajouter une humeur">
+      <span class="tab-icon" aria-hidden="true">➕</span>
+      <span class="tab-label">Ajouter</span>
+    </button>
+    <button class="tab" data-tab="calendar" role="tab" aria-selected="false" aria-label="Calendrier">
+      <span class="tab-icon" aria-hidden="true">📅</span>
+      <span class="tab-label">Calendrier</span>
+    </button>
+    <button class="tab" data-tab="stats" role="tab" aria-selected="false" aria-label="Statistiques">
+      <span class="tab-icon" aria-hidden="true">📊</span>
+      <span class="tab-label">Stats</span>
+    </button>
+    <button class="tab" data-tab="history" role="tab" aria-selected="false" aria-label="Historique">
+      <span class="tab-icon" aria-hidden="true">📋</span>
+      <span class="tab-label">Historique</span>
+    </button>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+</html>
