@@ -3,38 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#6C63FF">
+  <meta name="theme-color" content="#6C63FF" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#6C63FF" media="(prefers-color-scheme: dark)">
   <meta name="description" content="Journal d'humeur — Suivez votre humeur au quotidien">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <!-- Apple PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Humeur">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <link rel="apple-touch-startup-image" href="icons/splash.svg">
+
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/icon-192.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icons/icon-192.svg">
   <link rel="stylesheet" href="style.css">
   <title>Journal d'humeur</title>
 </head>
 <body>
+  <div id="network-banner" class="network-banner" role="status" aria-live="assertive" hidden></div>
+
   <header>
     <h1>Journal d'humeur</h1>
   </header>
 
   <main id="app" aria-live="polite"></main>
 
+  <!-- Install prompt banner -->
+  <div id="install-banner" class="install-banner" role="alert" hidden>
+    <div class="install-banner-content">
+      <div class="install-banner-icon" aria-hidden="true">
+        <svg width="40" height="40" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+          <rect width="192" height="192" rx="40" fill="#6C63FF"/>
+          <circle cx="96" cy="96" r="64" fill="rgba(255,255,255,0.15)"/>
+          <circle cx="76" cy="80" r="8" fill="#FFF"/>
+          <circle cx="116" cy="80" r="8" fill="#FFF"/>
+          <path d="M70 108 Q96 136 122 108" stroke="#FFF" stroke-width="5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="install-banner-text">
+        <strong>Installer l'application</strong>
+        <span>Accédez rapidement au journal depuis votre écran d'accueil</span>
+      </div>
+    </div>
+    <div class="install-banner-actions">
+      <button id="install-dismiss" class="install-btn-dismiss" aria-label="Fermer">Plus tard</button>
+      <button id="install-accept" class="install-btn-accept">Installer</button>
+    </div>
+  </div>
+
+  <!-- iOS install instructions overlay -->
+  <div id="ios-install-overlay" class="ios-install-overlay" role="dialog" aria-label="Instructions d'installation" hidden>
+    <div class="ios-install-card">
+      <button id="ios-install-close" class="ios-install-close" aria-label="Fermer">&times;</button>
+      <div class="ios-install-icon" aria-hidden="true">
+        <svg width="48" height="48" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+          <rect width="192" height="192" rx="40" fill="#6C63FF"/>
+          <circle cx="96" cy="96" r="64" fill="rgba(255,255,255,0.15)"/>
+          <circle cx="76" cy="80" r="8" fill="#FFF"/>
+          <circle cx="116" cy="80" r="8" fill="#FFF"/>
+          <path d="M70 108 Q96 136 122 108" stroke="#FFF" stroke-width="5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h2>Installer Journal d'humeur</h2>
+      <ol class="ios-install-steps">
+        <li>Appuyez sur le bouton <strong>Partager</strong> <span class="ios-share-icon" aria-hidden="true">&#x1F4E4;</span></li>
+        <li>Faites défiler et appuyez sur <strong>Sur l'écran d'accueil</strong></li>
+        <li>Appuyez sur <strong>Ajouter</strong></li>
+      </ol>
+    </div>
+  </div>
+
   <nav id="tab-bar" role="tablist" aria-label="Navigation principale">
     <button class="tab active" data-tab="add" role="tab" aria-selected="true" aria-label="Ajouter une humeur">
-      <span class="tab-icon" aria-hidden="true">➕</span>
+      <span class="tab-icon" aria-hidden="true">&#x2795;</span>
       <span class="tab-label">Ajouter</span>
     </button>
     <button class="tab" data-tab="calendar" role="tab" aria-selected="false" aria-label="Calendrier">
-      <span class="tab-icon" aria-hidden="true">📅</span>
+      <span class="tab-icon" aria-hidden="true">&#x1F4C5;</span>
       <span class="tab-label">Calendrier</span>
     </button>
     <button class="tab" data-tab="stats" role="tab" aria-selected="false" aria-label="Statistiques">
-      <span class="tab-icon" aria-hidden="true">📊</span>
+      <span class="tab-icon" aria-hidden="true">&#x1F4CA;</span>
       <span class="tab-label">Stats</span>
     </button>
     <button class="tab" data-tab="history" role="tab" aria-selected="false" aria-label="Historique">
-      <span class="tab-icon" aria-hidden="true">📋</span>
+      <span class="tab-icon" aria-hidden="true">&#x1F4CB;</span>
       <span class="tab-label">Historique</span>
     </button>
   </nav>

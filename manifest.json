@@ -1,15 +1,22 @@
 {
   "name": "Journal d'humeur",
   "short_name": "Humeur",
-  "description": "Suivez votre humeur au quotidien",
+  "description": "Suivez votre humeur au quotidien avec ce journal personnel. Ajoutez vos émotions, consultez le calendrier et analysez vos tendances.",
   "start_url": "./",
   "scope": "./",
   "id": "./",
   "display": "standalone",
-  "background_color": "#F0F0F5",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#6C63FF",
   "theme_color": "#6C63FF",
-  "categories": ["health", "lifestyle"],
+  "categories": ["health", "lifestyle", "medical"],
+  "lang": "fr",
+  "dir": "ltr",
   "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
   "icons": [
     {
       "src": "icons/icon-192.svg",
@@ -36,11 +43,39 @@
       "purpose": "maskable"
     }
   ],
+  "screenshots": [
+    {
+      "src": "icons/screenshots/mobile.svg",
+      "sizes": "390x844",
+      "type": "image/svg+xml",
+      "form_factor": "narrow",
+      "label": "Ajoutez votre humeur du jour"
+    },
+    {
+      "src": "icons/screenshots/desktop.svg",
+      "sizes": "1280x800",
+      "type": "image/svg+xml",
+      "form_factor": "wide",
+      "label": "Journal d'humeur sur ordinateur"
+    }
+  ],
   "shortcuts": [
     {
       "name": "Ajouter une humeur",
       "short_name": "Ajouter",
       "url": "./?tab=add",
+      "icons": [{ "src": "icons/icon-192.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Voir le calendrier",
+      "short_name": "Calendrier",
+      "url": "./?tab=calendar",
+      "icons": [{ "src": "icons/icon-192.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Statistiques",
+      "short_name": "Stats",
+      "url": "./?tab=stats",
       "icons": [{ "src": "icons/icon-192.svg", "sizes": "192x192" }]
     }
   ]

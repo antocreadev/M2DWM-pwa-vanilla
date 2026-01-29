@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mood-journal-v1';
+const CACHE_NAME = 'mood-journal-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -6,7 +6,10 @@ const ASSETS = [
   './app.js',
   './manifest.json',
   './icons/icon-192.svg',
-  './icons/icon-512.svg'
+  './icons/icon-512.svg',
+  './icons/splash.svg',
+  './icons/screenshots/mobile.svg',
+  './icons/screenshots/desktop.svg'
 ];
 
 // Install: cache static assets, then activate immediately

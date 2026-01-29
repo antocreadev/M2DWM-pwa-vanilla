@@ -547,6 +547,62 @@ header h1 {
   line-height: 1.5;
 }
 
+/* ── Network banner ── */
+.network-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 16px;
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 300;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fff;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+
+.network-banner[hidden] {
+  display: none;
+}
+
+.network-banner.visible {
+  transform: translateY(0);
+}
+
+.network-banner.offline {
+  background: var(--danger);
+}
+
+.network-banner.online {
+  background: var(--success);
+}
+
+.network-banner.syncing {
+  background: #f39c12;
+}
+
+.network-banner-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.network-banner-text {
+  flex: 1;
+}
+
+.network-banner-count {
+  background: rgba(255, 255, 255, 0.25);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
 /* ── Update banner ── */
 .update-banner {
   position: fixed;
@@ -578,6 +634,202 @@ header h1 {
 
 .update-banner button:hover {
   background: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Install banner ── */
+.install-banner {
+  position: fixed;
+  bottom: 72px;
+  bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  left: 8px;
+  right: 8px;
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  z-index: 150;
+  transform: translateY(calc(100% + 20px));
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.install-banner.visible {
+  transform: translateY(0);
+}
+
+.install-banner[hidden] {
+  display: none;
+}
+
+.install-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.install-banner-icon {
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.install-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.install-banner-text strong {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.install-banner-text span {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.install-banner-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.install-btn-dismiss {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.install-btn-dismiss:hover {
+  background: var(--bg);
+}
+
+.install-btn-accept {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s;
+}
+
+.install-btn-accept:hover {
+  background: var(--primary-hover);
+}
+
+/* ── iOS install overlay ── */
+.ios-install-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 500;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.ios-install-overlay[hidden] {
+  display: none;
+}
+
+.ios-install-overlay.visible {
+  opacity: 1;
+}
+
+.ios-install-card {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 28px 24px;
+  max-width: 380px;
+  width: 100%;
+  position: relative;
+  transform: translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ios-install-overlay.visible .ios-install-card {
+  transform: translateY(0);
+}
+
+.ios-install-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+}
+
+.ios-install-icon {
+  text-align: center;
+  margin-bottom: 12px;
+  line-height: 0;
+}
+
+.ios-install-card h2 {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.ios-install-steps {
+  list-style: none;
+  counter-reset: step;
+}
+
+.ios-install-steps li {
+  counter-increment: step;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.ios-install-steps li:last-child {
+  border-bottom: none;
+}
+
+.ios-install-steps li::before {
+  content: counter(step);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.ios-share-icon {
+  font-size: 1.1rem;
 }
 
 /* ── Focus visible (accessibility) ── */

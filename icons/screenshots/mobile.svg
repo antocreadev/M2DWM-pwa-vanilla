@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844">
+  <rect width="390" height="844" fill="#F0F0F5"/>
+  <!-- Header -->
+  <rect width="390" height="52" fill="#6C63FF"/>
+  <text x="195" y="32" font-family="system-ui,sans-serif" font-size="16" font-weight="600" fill="#FFF" text-anchor="middle">Journal d'humeur</text>
+  <!-- Content area -->
+  <text x="195" y="90" font-family="system-ui,sans-serif" font-size="18" font-weight="600" fill="#2D3436" text-anchor="middle">Comment vous sentez-vous ?</text>
+  <!-- Mood selector -->
+  <rect x="29" y="110" width="56" height="56" rx="12" fill="#FFF" stroke="#E0E0E8" stroke-width="2"/>
+  <text x="57" y="147" font-size="28" text-anchor="middle">&#x1F622;</text>
+  <rect x="97" y="110" width="56" height="56" rx="12" fill="#FFF" stroke="#E0E0E8" stroke-width="2"/>
+  <text x="125" y="147" font-size="28" text-anchor="middle">&#x1F615;</text>
+  <rect x="165" y="110" width="56" height="56" rx="12" fill="#FFF" stroke="#E0E0E8" stroke-width="2"/>
+  <text x="193" y="147" font-size="28" text-anchor="middle">&#x1F610;</text>
+  <rect x="233" y="110" width="56" height="56" rx="12" fill="rgba(108,99,255,0.1)" stroke="#6C63FF" stroke-width="2"/>
+  <text x="261" y="147" font-size="32" text-anchor="middle">&#x1F642;</text>
+  <rect x="301" y="110" width="56" height="56" rx="12" fill="#FFF" stroke="#E0E0E8" stroke-width="2"/>
+  <text x="329" y="147" font-size="28" text-anchor="middle">&#x1F604;</text>
+  <!-- Date field -->
+  <text x="20" y="204" font-family="system-ui,sans-serif" font-size="12" fill="#636E72" font-weight="500">Date</text>
+  <rect x="16" y="212" width="358" height="44" rx="8" fill="#FFF" stroke="#E0E0E8" stroke-width="1"/>
+  <text x="28" y="240" font-family="system-ui,sans-serif" font-size="14" fill="#2D3436">2025-01-29</text>
+  <!-- Note field -->
+  <text x="20" y="284" font-family="system-ui,sans-serif" font-size="12" fill="#636E72" font-weight="500">Note (optionnel)</text>
+  <rect x="16" y="292" width="358" height="80" rx="8" fill="#FFF" stroke="#E0E0E8" stroke-width="1"/>
+  <text x="28" y="316" font-family="system-ui,sans-serif" font-size="13" fill="#B2BEC3">Comment s'est passée votre journée ?</text>
+  <!-- Save button -->
+  <rect x="16" y="392" width="358" height="48" rx="8" fill="#6C63FF"/>
+  <text x="195" y="422" font-family="system-ui,sans-serif" font-size="15" font-weight="600" fill="#FFF" text-anchor="middle">Enregistrer</text>
+  <!-- Tab bar -->
+  <rect y="788" width="390" height="56" fill="#FFF"/>
+  <line x1="0" y1="788" x2="390" y2="788" stroke="#E0E0E8" stroke-width="1"/>
+  <text x="49" y="818" font-size="18" text-anchor="middle">&#x2795;</text>
+  <text x="49" y="834" font-family="system-ui,sans-serif" font-size="9" fill="#6C63FF" text-anchor="middle" font-weight="500">Ajouter</text>
+  <text x="146" y="818" font-size="18" text-anchor="middle">&#x1F4C5;</text>
+  <text x="146" y="834" font-family="system-ui,sans-serif" font-size="9" fill="#636E72" text-anchor="middle">Calendrier</text>
+  <text x="243" y="818" font-size="18" text-anchor="middle">&#x1F4CA;</text>
+  <text x="243" y="834" font-family="system-ui,sans-serif" font-size="9" fill="#636E72" text-anchor="middle">Stats</text>
+  <text x="341" y="818" font-size="18" text-anchor="middle">&#x1F4CB;</text>
+  <text x="341" y="834" font-family="system-ui,sans-serif" font-size="9" fill="#636E72" text-anchor="middle">Historique</text>
+</svg>

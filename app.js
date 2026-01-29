@@ -106,6 +106,84 @@
     }
   };
 
+  // ── Network Status Module ──
+
+  const NetworkStatus = {
+    banner: null,
+    hideTimeout: null,
+    pendingCount: 0,
+
+    init() {
+      this.banner = document.getElementById('network-banner');
+
+      window.addEventListener('online', () => this.onOnline());
+      window.addEventListener('offline', () => this.onOffline());
+
+      // Show banner on load if already offline
+      if (!navigator.onLine) {
+        this.onOffline();
+      }
+    },
+
+    onOffline() {
+      this.showBanner('offline', 'Hors ligne — les données sont sauvegardées localement', null);
+    },
+
+    async onOnline() {
+      const unsynced = await this.getUnsyncedEntries();
+      if (unsynced.length > 0) {
+        this.showBanner('syncing', 'Synchronisation en cours…', unsynced.length);
+        await this.syncEntries(unsynced);
+        this.showBanner('online', `Connexion rétablie — ${unsynced.length} entrée${unsynced.length > 1 ? 's' : ''} synchronisée${unsynced.length > 1 ? 's' : ''}`, null);
+      } else {
+        this.showBanner('online', 'Connexion rétablie', null);
+      }
+      this.autoHide(4000);
+    },
+
+    showBanner(type, text, count) {
+      if (this.hideTimeout) {
+        clearTimeout(this.hideTimeout);
+        this.hideTimeout = null;
+      }
+
+      const icons = { offline: '⚡', online: '✓', syncing: '↻' };
+      this.banner.hidden = false;
+      this.banner.className = 'network-banner ' + type;
+      this.banner.innerHTML =
+        `<span class="network-banner-icon" aria-hidden="true">${icons[type]}</span>` +
+        `<span class="network-banner-text">${text}</span>` +
+        (count != null ? `<span class="network-banner-count">${count}</span>` : '');
+
+      // Force reflow then add visible class for animation
+      this.banner.offsetHeight;
+      this.banner.classList.add('visible');
+    },
+
+    autoHide(delay) {
+      this.hideTimeout = setTimeout(() => {
+        this.banner.classList.remove('visible');
+        // Wait for CSS transition to end before hiding
+        setTimeout(() => { this.banner.hidden = true; }, 300);
+      }, delay);
+    },
+
+    async getUnsyncedEntries() {
+      const all = await DB.getAll();
+      return all.filter(e => e.synced === false);
+    },
+
+    async syncEntries(entries) {
+      for (const entry of entries) {
+        // TODO: Replace with real API call, e.g.:
+        // await fetch('/api/entries', { method: 'POST', body: JSON.stringify(entry) });
+        await new Promise(r => setTimeout(r, 200)); // simulate network request
+        entry.synced = true;
+        await DB.put(entry);
+      }
+    }
+  };
+
   // ── Router ──
 
   const Router = {
@@ -359,15 +437,19 @@
 
       saveBtn.addEventListener('click', async () => {
         if (!selectedMood) return;
+        const isOnline = navigator.onLine;
         await DB.put({
           date: dateInput.value,
           mood: selectedMood,
           note: noteInput.value.trim(),
-          timestamp: Date.now()
+          timestamp: Date.now(),
+          synced: isOnline
         });
-        feedback.textContent = 'Humeur enregistrée !';
+        feedback.textContent = isOnline
+          ? 'Humeur enregistrée !'
+          : 'Humeur sauvegardée localement (en attente de synchronisation)';
         feedback.classList.add('show');
-        setTimeout(() => feedback.classList.remove('show'), 2000);
+        setTimeout(() => feedback.classList.remove('show'), 3000);
       });
     },
 
@@ -551,6 +633,115 @@
     }
   };
 
+  // ── Install Prompt Module ──
+
+  const InstallPrompt = {
+    deferredPrompt: null,
+    isStandalone: false,
+
+    init() {
+      // Detect if already installed (standalone mode)
+      this.isStandalone =
+        window.matchMedia('(display-mode: standalone)').matches ||
+        window.navigator.standalone === true;
+
+      if (this.isStandalone) return; // Already installed, nothing to do
+
+      // Capture beforeinstallprompt for Chrome/Edge/Android
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        this.deferredPrompt = e;
+        this.showInstallBanner();
+      });
+
+      // Track successful installation
+      window.addEventListener('appinstalled', () => {
+        this.deferredPrompt = null;
+        this.hideInstallBanner();
+        localStorage.setItem('pwa-installed', 'true');
+      });
+
+      // iOS Safari: show custom instructions if not dismissed recently
+      this.checkIOSInstall();
+
+      // Wire up banner buttons
+      const dismissBtn = document.getElementById('install-dismiss');
+      const acceptBtn = document.getElementById('install-accept');
+      if (dismissBtn) dismissBtn.addEventListener('click', () => this.dismissInstall());
+      if (acceptBtn) acceptBtn.addEventListener('click', () => this.triggerInstall());
+
+      // Wire up iOS overlay close
+      const iosCloseBtn = document.getElementById('ios-install-close');
+      if (iosCloseBtn) iosCloseBtn.addEventListener('click', () => this.hideIOSOverlay());
+    },
+
+    showInstallBanner() {
+      // Don't show if user dismissed recently (within 7 days)
+      const dismissed = localStorage.getItem('install-dismissed');
+      if (dismissed && Date.now() - Number(dismissed) < 7 * 24 * 60 * 60 * 1000) return;
+
+      const banner = document.getElementById('install-banner');
+      if (banner) {
+        banner.hidden = false;
+        requestAnimationFrame(() => banner.classList.add('visible'));
+      }
+    },
+
+    hideInstallBanner() {
+      const banner = document.getElementById('install-banner');
+      if (banner) {
+        banner.classList.remove('visible');
+        setTimeout(() => { banner.hidden = true; }, 300);
+      }
+    },
+
+    async triggerInstall() {
+      if (!this.deferredPrompt) return;
+      this.deferredPrompt.prompt();
+      const { outcome } = await this.deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        this.deferredPrompt = null;
+      }
+      this.hideInstallBanner();
+    },
+
+    dismissInstall() {
+      localStorage.setItem('install-dismissed', String(Date.now()));
+      this.hideInstallBanner();
+    },
+
+    checkIOSInstall() {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const isSafari = /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|EdgiOS/.test(navigator.userAgent);
+
+      if (!isIOS || !isSafari) return;
+
+      // Don't show if already dismissed recently
+      const dismissed = localStorage.getItem('install-dismissed');
+      if (dismissed && Date.now() - Number(dismissed) < 7 * 24 * 60 * 60 * 1000) return;
+
+      // Show after a short delay to not be intrusive
+      setTimeout(() => this.showIOSOverlay(), 3000);
+    },
+
+    showIOSOverlay() {
+      const overlay = document.getElementById('ios-install-overlay');
+      if (overlay) {
+        overlay.hidden = false;
+        requestAnimationFrame(() => overlay.classList.add('visible'));
+      }
+    },
+
+    hideIOSOverlay() {
+      localStorage.setItem('install-dismissed', String(Date.now()));
+      const overlay = document.getElementById('ios-install-overlay');
+      if (overlay) {
+        overlay.classList.remove('visible');
+        setTimeout(() => { overlay.hidden = true; }, 300);
+      }
+    }
+  };
+
   // ── SW update banner ──
 
   function showUpdateBanner() {
@@ -573,8 +764,14 @@
     await DB.open();
     UI.init();
     Router.init();
-    Router.navigate('add');
+
+    // Handle tab from URL (for manifest shortcuts)
+    const urlTab = new URLSearchParams(window.location.search).get('tab');
+    Router.navigate(['add', 'calendar', 'stats', 'history'].includes(urlTab) ? urlTab : 'add');
+
     Notifications.init();
+    NetworkStatus.init();
+    InstallPrompt.init();
 
     if ('serviceWorker' in navigator) {
       try {

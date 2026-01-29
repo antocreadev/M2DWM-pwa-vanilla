@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1170" height="2532" viewBox="0 0 1170 2532">
+  <rect width="1170" height="2532" fill="#6C63FF"/>
+  <!-- Icon circle -->
+  <circle cx="585" cy="1100" r="128" fill="rgba(255,255,255,0.15)"/>
+  <circle cx="545" cy="1068" r="16" fill="#FFF"/>
+  <circle cx="625" cy="1068" r="16" fill="#FFF"/>
+  <path d="M530 1130 Q585 1175 640 1130" stroke="#FFF" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <!-- App name -->
+  <text x="585" y="1320" font-family="system-ui,-apple-system,sans-serif" font-size="48" font-weight="700" fill="#FFF" text-anchor="middle">Journal d'humeur</text>
+  <text x="585" y="1380" font-family="system-ui,-apple-system,sans-serif" font-size="28" fill="rgba(255,255,255,0.7)" text-anchor="middle">Suivez votre humeur au quotidien</text>
+</svg>
